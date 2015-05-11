@@ -1,0 +1,14 @@
+%%% -*- mode: erlang -*-
+{application, drillman,
+ [
+  {description, "Dead simple messaging to mandrill"},
+  {vsn, "0.0.1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  ssl,
+                  inets
+                 ]},
+  {env, []}
+ ]}.
