@@ -42,7 +42,7 @@ handle_resp({{_, 200, _}, _Headers, Body}) ->
             {ok, queued};
         <<"invalid">> ->
             {error, {invalid, Resp}};
-        O -> {error, O}
+        O -> {error, {O, Resp}}
     end;
 handle_resp(R) -> %% TODO Handle this better
     {error, R}.
