@@ -7,7 +7,7 @@
 -define(NULL_FIELDS,
         [{async, false},
          {send_at, <<"">>},
-         {ip_pool, <<"whatever">>}
+         {ip_pool, <<"default">>}
          ]).
 
 send(APIKey, Recipient, Subject, From, Message) ->
