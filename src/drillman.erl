@@ -1,20 +1,23 @@
 -module(drillman).
 
 -export([send/5]).
+-export([send/6]).
 
 -define(MANDRILL_API, "https://mandrillapp.com/api/1.0/messages/send.json").
 
 -define(NULL_FIELDS,
         [{async, false},
          {send_at, <<"">>},
-         {ip_pool, <<"default">>}
+         {ip_pool, <<"whatever">>}
          ]).
 
 send(APIKey, Recipient, Subject, From, Message) ->
+    send(APIKey, Recipient, Subject, From, Message, []).
+
+send(APIKey, Recipient, Subject, From, Message, Extra) ->
     ToEmail = [{email, Recipient},
                {type, <<"to">>},
-               {name, <<"Jim Bob">>}],
-
+               {name, <<"You">>}],
     Payload =
         ?NULL_FIELDS ++
         [{key, APIKey},
@@ -22,7 +25,7 @@ send(APIKey, Recipient, Subject, From, Message) ->
           [{html, Message},
            {subject, Subject},
            {from_email, From},
-           {to, [ToEmail]}]}],
+           {to, [ToEmail]}|Extra]}],
     Uri = ?MANDRILL_API,
     Headers = [],
     ContentType = "application/json",
@@ -42,7 +45,7 @@ handle_resp({{_, 200, _}, _Headers, Body}) ->
             {ok, queued};
         <<"invalid">> ->
             {error, {invalid, Resp}};
-        O -> {error, {O, Resp}}
+        O -> {error, O}
     end;
 handle_resp(R) -> %% TODO Handle this better
     {error, R}.
