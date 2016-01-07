@@ -14,7 +14,7 @@
 send(APIKey, Recipient, Subject, From, Message, Extra) ->
     send(APIKey, Recipient, Subject, From, Message, Extra, <<"You">>).
 
-send(APIKey, Recipient, Subject, From, Message, Extra, Name) ->
+send(APIKey, Recipient, Subject, {FromEmail, FromName}, Message, Extra, Name) ->
     ToEmail = [{email, Recipient},
                {type, <<"to">>},
                {name, Name}],
@@ -24,7 +24,8 @@ send(APIKey, Recipient, Subject, From, Message, Extra, Name) ->
          {message,
           [{html, Message},
            {subject, Subject},
-           {from_email, From},
+           {from_name, FromName},
+           {from_email, FromEmail},
            {to, [ToEmail]}|Extra]}],
     Uri = ?MANDRILL_API,
     Headers = [],
