@@ -1,7 +1,7 @@
 -module(drillman).
 
--export([send/5]).
 -export([send/6]).
+-export([send/7]).
 
 -define(MANDRILL_API, "https://mandrillapp.com/api/1.0/messages/send.json").
 
@@ -11,13 +11,13 @@
          {ip_pool, <<"whatever">>}
          ]).
 
-send(APIKey, Recipient, Subject, From, Message) ->
-    send(APIKey, Recipient, Subject, From, Message, []).
-
 send(APIKey, Recipient, Subject, From, Message, Extra) ->
+    send(APIKey, Recipient, Subject, From, Message, Extra, <<"You">>).
+
+send(APIKey, Recipient, Subject, From, Message, Extra, Name) ->
     ToEmail = [{email, Recipient},
                {type, <<"to">>},
-               {name, <<"You">>}],
+               {name, Name}],
     Payload =
         ?NULL_FIELDS ++
         [{key, APIKey},
