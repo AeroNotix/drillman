@@ -15,6 +15,9 @@ send(APIKey, Recipient, Subject, From, Message, Extra) ->
     send(APIKey, Recipient, Subject, From, Message, Extra, <<"You">>).
 
 send(APIKey, Recipient, Subject, {FromEmail, FromName}, Message, Extra, Name) ->
+    send(APIKey, Recipient, Subject, {FromEmail, FromName}, Message, Extra, Name, 30000).
+
+send(APIKey, Recipient, Subject, {FromEmail, FromName}, Message, Extra, Name, Timeout) ->
     ToEmail = [{email, Recipient},
                {type, <<"to">>},
                {name, Name}],
@@ -32,7 +35,7 @@ send(APIKey, Recipient, Subject, {FromEmail, FromName}, Message, Extra, Name) ->
     ContentType = "application/json",
     Body = binary_to_list(jsx:encode(Payload)),
     Request = {Uri, Headers, ContentType, Body},
-    {ok, Resp} = httpc:request(post, Request, [], []),
+    {ok, Resp} = httpc:request(post, Request, [{timeout, Timeout}], []),
     handle_resp(Resp).
 
 handle_resp({{_, 200, _}, _Headers, Body}) ->
